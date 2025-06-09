@@ -1,132 +1,89 @@
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-
-const skills = [
-  {
-    name: "SEO",
-    category: "Marketing & Advertising",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Social Media Marketing",
-    category: "Marketing & Advertising",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Branding",
-    category: "Marketing & Advertising",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Web Development",
-    category: "Creative & Tech Solution",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Mobile App Development",
-    category: "Creative & Tech Solution",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Custom Software Solutions",
-    category: "Creative & Tech Solution",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Event Planning",
-    category: "Strategy & Consultation",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Entertainment Production",
-    category: "Strategy & Consultation",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Digital Experiences",
-    category: "Strategy & Consultation",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Market Analysis & Insights",
-    category: "Events & Management",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Sales Optimization",
-    category: "Events & Management",
-    image: "/projects/project2.png",
-  },
-  {
-    name: "Business Growth Strategy",
-    category: "Events & Management",
-    image: "/projects/project2.png",
-  },
-];
-
-const categories = [
-  "all",
-  "Marketing & Advertising",
-  "Creative & Tech Solution",
-  "Strategy & Consultation",
-  "Events & Management",
-];
+import React, { useState, useRef, useEffect } from 'react';
 
 export const SkillsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
+    const [faq, setFaq] = useState([
+        {
+            question: 'AI Solutions',
+            answer: '<p class="text-gray-700 dark:text-gray-300">1. AI-Powered Trend & Virality Mapping</p> <p class="text-gray-700 dark:text-gray-300">2. AI CRM & Smart Retargeting</p> <p class="text-gray-700 dark:text-gray-300">3. Generative AI Content & Campaigns</p> <p class="text-gray-700 dark:text-gray-300">4. Workflow & Business Process Automation</p>',
+            open: false
+        },
+        {
+            question: 'Marketing',
+            answer: '<p class="text-gray-700 dark:text-gray-300">1. Social Media Management & Content Creation</p> <p class="text-gray-700 dark:text-gray-300">2. Paid Ads & Performance Marketing</p> <p class="text-gray-700 dark:text-gray-300">3. Brand Strategy & Identity Development</p> <p class="text-gray-700 dark:text-gray-300">4. Influencer & Meme Marketing</p> <p class="text-gray-700 dark:text-gray-300">5. PR, Launch & Buzz Campaigns</p>',
+            open: false
+        },
+        {
+            question: 'Development',
+            answer: '<p class="text-gray-700 dark:text-gray-300">1. Web & Mobile App Development </p> <p class="text-gray-700 dark:text-gray-300">2. UI/UX Design & Wireframing</p> <p class="text-gray-700 dark:text-gray-300">3. No-Code / Low-Code MVP Builds</p>  <p class="text-gray-700 dark:text-gray-300">5. Custom Dashboards & Internal Tools</p> <p class="text-gray-700 dark:text-gray-300">6. Product-Led Growth Infrastructure</p>',
+            open: false
+        },
+    ]);
 
-  const filteredSkills = skills.filter(
-    (skill) => activeCategory === "all" || skill.category === activeCategory
-    
-  );
+    const toggleFaq = (index) => {
+        setFaq(faq.map((item, i) => ({
+            ...item,
+            open: i === index ? !item.open : false
+        })));
+    };
 
-  return (
-    <section id="skills" className="py-24 px-4 relative bg-secondary/30">
-      <div className="container mx-auto max-w-5xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          Our <span className="text-primary">Services</span>
-        </h2>
+    return (
+        <section className="py-10 bg-gray-50 dark:bg-gray-900 sm:py-16 lg:py-24 font-sans transition-colors duration-300">
+            <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+                <div className="max-w-2xl mx-auto text-center">
+                    <h2 className="text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl lg:text-5xl">Our Services</h2>
+                    <p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                        Amet minim mollit non deserunt ullamco est sit aliqua dolor do
+                    </p>
+                </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category, key) => (
-            <button
-              key={key}
-              onClick={() => setActiveCategory(category)}
-              className={cn(
-                "px-5 py-2 rounded-full transition-colors duration-300 capitalize",
-                activeCategory === category
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary/70 text-foreground hover:bg-secondary"
-              )}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSkills.map((skill, key) => (
-        <div
-          key={key}
-          className="bg-card rounded-lg shadow-xs card-hover group overflow-hidden transition-all duration-500 ease-in-out h-20 md:h-20 md:hover:h-64 flex flex-col"
-        >
-          {/* Image container (hidden on mobile, visible on hover for desktop) */}
-          <div className="w-full h-0 md:h-0 md:group-hover:h-40 overflow-hidden transition-all duration-500 ease-in-out">
-            <img
-              src={skill.image}
-              alt={skill.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Text */}
-          <div className="p-6 flex-grow flex items-center justify-center">
-            <h3 className="font-thin text-lg">{skill.name}</h3>
-          </div>
-        </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+                <div className="max-w-3xl mx-auto mt-8 space-y-4 md:mt-16">
+                    {faq.map((item, index) => (
+                        <FaqCard
+                            key={index}
+                            item={item}
+                            onClick={() => toggleFaq(index)}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
 };
+
+const FaqCard = ({ item, onClick }) => {
+    const contentRef = useRef(null);
+
+    return (
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 rounded-lg">
+            <button
+                type="button"
+                className="flex items-center justify-between w-full px-4 py-5 sm:p-6"
+                onClick={onClick}
+            >
+                <span className="flex text-lg font-semibold text-black dark:text-white">{item.question}</span>
+                <svg
+                    className={`w-6 h-6 text-gray-400 transition-transform duration-300 ${item.open ? 'rotate-180' : ''}`}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <div
+                ref={contentRef}
+                className="px-2 sm:px-6 text-left overflow-hidden transition-all duration-500 ease-in-out"
+                style={{
+                    maxHeight: item.open ? `${contentRef.current?.scrollHeight}px` : '0px',
+                    opacity: item.open ? 1 : 0,
+                }}
+            >
+                <div className="py-4 space-y-2" dangerouslySetInnerHTML={{ __html: item.answer }}></div>
+            </div>
+        </div>
+    );
+};
+
+export default SkillsSection;

@@ -17,10 +17,16 @@ export const AboutSection = () => {
             </h3>
 
             <p className="text-muted-foreground">
-              Thinksync is a passionate consulting agency dedicated to helping 
-              businesses unlock their true potential. With a unique mix of creativity, 
-              strategy, and market expertise, we specialize in building brands that people trust, 
-              by providing them with our 4 pillars of services spreaded over different domains. 
+              At Think Sync, we believe great businesses are built on systems that scale, not guesswork.
+            </p>
+            <p className="text-muted-foreground">
+              We’re a modern marketing and tech consultancy helping brands grow through a 360° approach. From AI automation to full-funnel marketing and digital product development, we align strategy with sharp execution.
+            </p>
+            <p className="text-muted-foreground">
+              Whether you're a startup launching fast or a brand scaling smart, Think Sync becomes your extended growth team. We don't just create campaigns. We build momentum.
+            </p>
+            <p className="text-muted-foreground">
+              Don't just think. Sync it.
             </p>
 
             <p className="text-muted-foreground">
@@ -34,12 +40,12 @@ export const AboutSection = () => {
                 Get In Touch
               </a> */}
 
-              <a
+              {/* <a
                 href="/public/projects/ThinkSync.pdf"
                 className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
               >
                 Download Brochure 
-              </a>
+              </a> */}
             </div>
           </div>
 
@@ -50,14 +56,9 @@ export const AboutSection = () => {
                   <Code className="h-6 w-6 text-primary" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-lg"> Innovate, Automate, and Accelerate</h4>
+                  <h4 className="font-semibold text-lg"> AI Solutions </h4>
                   <p className="text-muted-foreground">
-                    Every Problem requires a technical solution
-                    {/* <br />
-                    <br />
-                    + Web Development <p></p>
-                    + Mobile App Development <p></p>
-                    + Custom Software Solutions */}
+                    Custom AI Agents (Support, Retention, Lead Gen)
                   </p>
                 </div>
               </div>
@@ -70,14 +71,9 @@ export const AboutSection = () => {
                   <ChartNoAxesCombined className="h-6 w-6 text-primary" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-lg"> Strategy & Consultation</h4>
+                  <h4 className="font-semibold text-lg"> Marketing</h4>
                   <p className="text-muted-foreground">
-                    Create Memorable Experiences
-                    {/* <br />
-                    <br />
-                    + Event Planning <p></p>
-                    + Entertainment Production <p></p>
-                    + Digital Experiences */}
+                    360° Marketing Strategy & Execution
                   </p>
                 </div>
               </div>
@@ -90,19 +86,14 @@ export const AboutSection = () => {
                   <Users className="h-6 w-6 text-primary" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-lg">Marketing & Advertising</h4>
+                  <h4 className="font-semibold text-lg">Development</h4>
                   <p className="text-muted-foreground">
-                    Engage Your Audience
-                    {/* <br />
-                    <br />
-                    +  SEO <p></p>
-                    +  Social Media Marketing<p></p>
-                    +  Branding<p></p> */}
+                    Web & Mobile App Development
                   </p>
                 </div>
               </div>
             </div>
-            <div className="gradient-border p-6 card-hover">
+            {/* <div className="gradient-border p-6 card-hover">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-full bg-primary/10">
                   <Briefcase className="h-6 w-6 text-primary" />
@@ -112,15 +103,10 @@ export const AboutSection = () => {
                   <h4 className="font-semibold text-lg">Events & Management</h4>
                   <p className="text-muted-foreground">
                     Strategies That Deliver Results
-                    {/* <br />
-                    <br />
-                    + Market Analysis & Insights <p></p>
-                    + Sales Optimization <p></p>
-                    + Business Growth Strategy */}
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
