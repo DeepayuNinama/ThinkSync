@@ -15,12 +15,13 @@ export const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.screenY > 10);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <nav
       className={cn(
@@ -29,17 +30,22 @@ export const Navbar = () => {
       )}
     >
       <div className="container flex items-center justify-between">
-        <a
-          className="text-xl font-bold text-primary flex items-center"
-          href="#hero"
-        >
-          <span className="relative z-10">
-            <span className="text-glow text-foreground"> Think </span>{" "}
-            Sync
-          </span>
+        <a href="#hero" className="flex items-center">
+          {/* Light mode logo (black) */}
+          <img
+          src="/projects/logo-black.png"
+          alt="Think Sync Logo"
+          className="block dark:hidden h-6 w-auto transition-all duration-300"
+        />
+
+        <img
+          src="/projects/logo-white.png"
+          alt="Think Sync Logo"
+          className="hidden dark:block h-6 w-auto transition-all duration-300"
+        />
         </a>
 
-        {/* desktop nav */}
+        {/* Desktop nav */}
         <div className="hidden md:flex space-x-8">
           {navItems.map((item, key) => (
             <a
@@ -52,19 +58,19 @@ export const Navbar = () => {
           ))}
         </div>
 
-        {/* mobile nav */}
-
+        {/* Mobile toggle button */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="md:hidden p-2 text-foreground z-50"
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
+        {/* Mobile menu */}
         <div
           className={cn(
-            "fixed inset-0 bg-background/95 backdroup-blur-md z-40 flex flex-col items-center justify-center",
+            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
             "transition-all duration-300 md:hidden",
             isMenuOpen
               ? "opacity-100 pointer-events-auto"
