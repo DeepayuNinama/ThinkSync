@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navItems = [
@@ -12,15 +12,20 @@ const navItems = [
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle("dark");
+    setIsDarkMode(!isDarkMode);
+  };
 
   return (
     <nav
@@ -30,23 +35,23 @@ export const Navbar = () => {
       )}
     >
       <div className="container flex items-center justify-between">
+        {/* Logo */}
         <a href="#hero" className="flex items-center">
-          {/* Light mode logo (black) */}
           <img
-          src="/projects/logo-black.png"
-          alt="Think Sync Logo"
-          className="block dark:hidden h-6 w-auto transition-all duration-300"
-        />
-
-        <img
-          src="/projects/logo-white.png"
-          alt="Think Sync Logo"
-          className="hidden dark:block h-6 w-auto transition-all duration-300"
-        />
+            src="/projects/logo-black.png"
+            alt="Think Sync Logo"
+            className="block dark:hidden h-6 w-auto transition-all duration-300"
+          />
+          <img
+            src="/projects/logo-white.png"
+            alt="Think Sync Logo"
+            className="hidden dark:block h-6 w-auto transition-all duration-300"
+          />
         </a>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex space-x-8">
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-6">
           {navItems.map((item, key) => (
             <a
               key={key}
@@ -56,18 +61,30 @@ export const Navbar = () => {
               {item.name}
             </a>
           ))}
+          {/* Dark mode toggle on desktop (optional) */}
+          {/* <button onClick={toggleTheme} className="text-foreground">
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button> */}
         </div>
 
-        {/* Mobile toggle button */}
-        <button
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="md:hidden p-2 text-foreground z-50"
-          aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Controls */}
+        <div className="flex items-center md:hidden space-x-4 z-50">
+          {/* Dark mode toggle */}
+          <button onClick={toggleTheme} className="text-foreground">
+            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
 
-        {/* Mobile menu */}
+          {/* Hamburger toggle */}
+          <button
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="p-2 text-foreground"
+            aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
         <div
           className={cn(
             "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
