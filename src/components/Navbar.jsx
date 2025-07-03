@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const navItems = [
   { name: "Home", href: "#hero" },
-  { name: "Services", href: "#about" },
+  { name: "Services", href: "#skills" },
   { name: "Portfolio", href: "#projects" },
   { name: "Let's Connect", href: "#contact" },
 ];
@@ -61,10 +61,10 @@ export const Navbar = () => {
               {item.name}
             </a>
           ))}
-          {/* Dark mode toggle on desktop (optional) */}
-          {/* <button onClick={toggleTheme} className="text-foreground">
+
+          <button onClick={toggleTheme} className="text-foreground">
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button> */}
+          </button>
         </div>
 
         {/* Mobile Controls */}

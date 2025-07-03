@@ -29,6 +29,24 @@ export const ContactSection = () => {
       setIsSubmitting(false);
     }, 1500);
   };
+
+  const handleEmailCopy = async () => {
+  await navigator.clipboard.writeText("thinksyncnow@gmail.com");
+  toast({
+    title: "Copied!",
+    description: "Email address copied to clipboard.",
+  });
+  }
+   // handlePhoneCopy
+  const handlePhoneCopy = async () => {
+  await navigator.clipboard.writeText("+91 97262 17070");
+  toast({
+    title: "Copied!",
+    description: "Phone Number copied to clipboard.",
+  });
+};
+
+
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
@@ -41,53 +59,62 @@ export const ContactSection = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <h3 className="text-2xl font-semibold mb-6">
-              {" "}
- 
-            </h3>
+          <div className="space-y-8 ">
 
-            <div className="space-y-12 justify-center">
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Mail className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium "> Email</h4>
-                  <a
-                    href="thinksync@gmail.com"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    thinksync@gmail.com
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Phone className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium"> Phone</h4>
-                  <a
-                    href="+91 97262 17070"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    +91 97262 17070
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <MapPin className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium"> Location</h4>
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Ahmedabad, Gujarat
-                  </a>
-                </div>
-              </div>
-            </div>
+<div className="space-y-8 text-left w-full pl-10">
+  {/* Email */}
+  <div className="flex items-start gap-4">
+    <div className="p-3 rounded-full bg-primary/10 shrink-0">
+      <Mail className="h-6 w-6 text-primary" />
+    </div>
+    <div>
+      <h4 className="font-medium text-sm text-foreground/70">Email</h4>
+      <button
+        onClick={handleEmailCopy}
+        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
+      >
+        thinksyncnow@gmail.com
+      </button>
+    </div>
+  </div>
+
+  {/* Phone */}
+  <div className="flex items-start gap-4">
+    <div className="p-3 rounded-full bg-primary/10 shrink-0">
+      <Phone className="h-6 w-6 text-primary" />
+    </div>
+    <div>
+      <h4 className="font-medium text-sm text-foreground/70">Phone</h4>
+      <button
+        onClick={handlePhoneCopy}
+        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
+      >
+        +91 97262 17070
+      </button>
+    </div>
+  </div>
+
+  {/* Location */}
+  <div className="flex items-start gap-4">
+    <div className="p-3 rounded-full bg-primary/10 shrink-0">
+      <MapPin className="h-6 w-6 text-primary" />
+    </div>
+    <div>
+      <h4 className="font-medium text-sm text-foreground/70">Location</h4>
+      <a
+        href="https://maps.app.goo.gl/wLx296VcUA1HE1yg6"
+        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ahmedabad, Gujarat
+      </a>
+    </div>
+  </div>
+</div>
+ 
+
+
 
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
