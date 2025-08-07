@@ -9,53 +9,59 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.target);
-    const data = new URLSearchParams(formData).toString();
+    // This URL must be from the most recent deployment of the Apps Script.
+    // It is critical that this is the NEW URL from your latest deployment.
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzhksS6uLb3-YDVc_zy0_36M21KCHfe25KuBlctiOK5DRtfSfeLYeL6cG_uqUyBuSfQNw/exec";
 
-    // ---
-    // ✅ IMPORTANT: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
-    // You MUST redeploy the Apps Script and use the new URL.
-    // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbwx10iq7_I--uBoPSQfq5EdvqNFTMFmUwcOeFzFCohhsdjTlGtBg_591IvEN3FHdYAg5Q/exec";
+    // Set the form attributes for submission to the Apps Script URL
+    formRef.current.action = appsScriptUrl;
+    formRef.current.method = "POST";
+    formRef.current.target = "hidden-iframe";
+    
+    // Create a hidden iframe for the form submission to bypass CORS
+    const iframe = document.createElement("iframe");
+    iframe.name = "hidden-iframe";
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
 
-    try {
-      const response = await fetch(appsScriptUrl, {
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
-
-      if (response.ok) {
-        toast({
-          title: "ThinkSync heard you!",
-          description: "Thank you for notifying us, we're looking forward to connecting!",
-        });
-        e.target.reset();
-      } else {
-        throw new Error("Form submission failed");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Submission failed",
-        description: "There was an error sending your message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
+    iframe.onload = () => {
       setIsSubmitting(false);
-    }
+      
+      try {
+        const iframeContent = iframe.contentWindow.document.body.innerText;
+        if (iframeContent.trim() === "success") {
+          toast({
+            title: "ThinkSync heard you!",
+            description: "Thank you for notifying us, we're looking forward to connecting!",
+          });
+          formRef.current.reset(); // Reset the form fields on success
+        } else {
+          throw new Error("Form submission failed");
+        }
+      } catch (error) {
+        console.error("Error with iframe content:", error);
+        toast({
+          title: "Submission failed",
+          description: "There was an error sending your message. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        document.body.removeChild(iframe);
+      }
+    };
+
+    formRef.current.submit();
   };
 
   const handleEmailCopy = async () => {
@@ -155,7 +161,7 @@ export const ContactSection = () => {
             className="bg-card p-8 rounded-lg shadow-xs"
           >
             <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" ref={formRef}>
               <div>
                 <label
                   htmlFor="name"
