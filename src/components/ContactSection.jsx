@@ -27,9 +27,9 @@ export const ContactSection = () => {
 
     // ---
     // ✅ IMPORTANT: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
-    // You MUST redeploy the Apps Script and use the new URL.
+    // It is critical that this is the NEW URL from your latest deployment.
     // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxeueG9G0rqAjDDKxI0FJ4Wb6CqTisMWIid5hE80BRYRGe2axUd0MpIbdBa3JTzHnMfaA/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbz5KjmAnPjnkwaJ3b6Ud2HEaJKFjq8R3pxuaqCC1FALLB-BHc1yz1buvIpGYISJTwy3Hg/exec";
 
     try {
       const response = await fetch(appsScriptUrl, {
