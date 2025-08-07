@@ -23,10 +23,10 @@ export const ContactSection = () => {
     const data = Object.fromEntries(formData.entries());
 
     // ---
-    // ✅ SUCCESS: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
-    // This URL must be from the most recent deployment.
+    // ✅ PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
+    // It is critical that this is the NEW URL from your latest deployment.
     // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyqo1aOe5Ynwr5cEbvNY9lIREQEJ9JBSU2ydiS9hGEWxv-Ttr4txTl0k7mP9nLgQxzZXw/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxE_V28Wet_QuU1xtUSsPXOGR5Pf04IQTtoWe9tS9zYfEXlRqcWhYQkLb0pg_USdeEooQ/exec";
 
     try {
       const response = await fetch(appsScriptUrl, {
