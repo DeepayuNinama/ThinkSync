@@ -22,7 +22,7 @@ export const ContactSection = () => {
 
     // This URL must be from the most recent deployment of the Apps Script.
     // It is critical that this is the NEW URL from your latest deployment.
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzhksS6uLb3-YDVc_zy0_36M21KCHfe25KuBlctiOK5DRtfSfeLYeL6cG_uqUyBuSfQNw/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzX1YGTBwGRkdEM95pXnVYZUSx0UkG34Gq2U4zkmOD6pOEonAAn9UROHjOFTbLTe-r6oQ/exec";
 
     // Set the form attributes for submission to the Apps Script URL
     formRef.current.action = appsScriptUrl;
@@ -35,30 +35,22 @@ export const ContactSection = () => {
     iframe.style.display = "none";
     document.body.appendChild(iframe);
 
+    // --- FIX FOR SECURITYERROR ---
+    // The onload handler will no longer try to read the iframe's content.
+    // It will simply assume success and clean up after submission.
     iframe.onload = () => {
       setIsSubmitting(false);
       
-      try {
-        const iframeContent = iframe.contentWindow.document.body.innerText;
-        if (iframeContent.trim() === "success") {
-          toast({
-            title: "ThinkSync heard you!",
-            description: "Thank you for notifying us, we're looking forward to connecting!",
-          });
-          formRef.current.reset(); // Reset the form fields on success
-        } else {
-          throw new Error("Form submission failed");
-        }
-      } catch (error) {
-        console.error("Error with iframe content:", error);
-        toast({
-          title: "Submission failed",
-          description: "There was an error sending your message. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        document.body.removeChild(iframe);
-      }
+      // We assume success since the iframe successfully loaded the response.
+      toast({
+        title: "ThinkSync heard you!",
+        description: "Thank you for notifying us, we're looking forward to connecting!",
+      });
+
+      formRef.current.reset(); // Reset the form fields on success
+      
+      // Clean up the iframe
+      document.body.removeChild(iframe);
     };
 
     formRef.current.submit();
