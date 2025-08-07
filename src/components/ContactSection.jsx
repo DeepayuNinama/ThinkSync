@@ -9,68 +9,93 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react"; // Removed useRef as it's no longer needed
+import { useState } from "react";
 
+// ---
+// The main ContactSection component.
+// This component now includes an updated handleSubmit function
+// that sends form data to a Google Apps Script endpoint.
+// ---
 export const ContactSection = () => {
+  // useToast hook for displaying notifications
   const { toast } = useToast();
+  // State to manage the submission status of the form
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // The handleSubmit function now uses a standard fetch request with a URL-encoded body
+  // ---
+  // The handleSubmit function is now an async function
+  // that uses the Fetch API to send data to the Google Apps Script.
+  // It handles success, failure, and form state changes.
+  // ---
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault(); // Prevent the default form submission behavior
+    setIsSubmitting(true); // Set the submitting state to true
 
-    // Get the form data
+    // Create a FormData object from the form to easily get all input values
     const formData = new FormData(e.target);
-    // Convert it to URLSearchParams for a 'x-www-form-urlencoded' request
-    const data = new URLSearchParams(formData).toString();
+    // Convert the FormData object into a plain JavaScript object
+    const data = Object.fromEntries(formData.entries());
 
     // ---
-    // ✅ IMPORTANT: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
-    // It is critical that this is the NEW URL from your latest deployment.
+    // IMPORTANT: Replace this URL with your actual deployed Google Apps Script URL.
+    // The URL you provided in the chat is a good example.
     // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbz5KjmAnPjnkwaJ3b6Ud2HEaJKFjq8R3pxuaqCC1FALLB-BHc1yz1buvIpGYISJTwy3Hg/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyN4acIICroqy5KYj3GM1rHtmAEEPDTnQbtBubppmuuCxfAvaKdkat2fCIQjiDdm3I8_Q/exec";
 
     try {
+      // Use the Fetch API to send a POST request to the Apps Script URL
       const response = await fetch(appsScriptUrl, {
         method: "POST",
-        body: data, // Send the URL-encoded string directly
+        // Convert the data object to a JSON string
+        body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          // Specify the content type as JSON
+          "Content-Type": "application/json",
         },
       });
 
+      // Check if the response from the server is successful
       if (response.ok) {
+        // Show the success toast message
         toast({
           title: "ThinkSync heard you!",
           description: "Thank you for notifying us, we're looking forward to connecting!",
         });
-        e.target.reset(); // Reset the form fields after successful submission
+        // Reset the form fields after a successful submission
+        e.target.reset();
       } else {
+        // If the response is not ok, throw an error
         throw new Error("Form submission failed");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      // Show an error toast message
       toast({
         title: "Submission failed",
         description: "There was an error sending your message. Please try again.",
-        variant: "destructive",
+        variant: "destructive", // Assuming you have a 'destructive' variant for error toasts
       });
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Reset the submitting state in any case (success or failure)
     }
   };
 
+  // Function to handle copying the email address to the clipboard
   const handleEmailCopy = async () => {
+    // Use the clipboard API to copy the text
     await document.execCommand('copy', false, "thinksyncnow@gmail.com");
+    // Show a toast notification
     toast({
       title: "Copied!",
       description: "Email address copied to clipboard.",
     });
   };
 
+  // Function to handle copying the phone number to the clipboard
   const handlePhoneCopy = async () => {
+    // Use the clipboard API to copy the text
     await document.execCommand('copy', false, "+91 97262 17070");
+    // Show a toast notification
     toast({
       title: "Copied!",
       description: "Phone Number copied to clipboard.",
@@ -88,8 +113,10 @@ export const ContactSection = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Left column for contact info and social links */}
           <div className="space-y-8 ">
             <div className="space-y-8 text-left w-full pl-10">
+              {/* Email section */}
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-full bg-primary/10 shrink-0">
                   <Mail className="h-6 w-6 text-primary" />
@@ -105,6 +132,7 @@ export const ContactSection = () => {
                 </div>
               </div>
 
+              {/* Phone section */}
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-full bg-primary/10 shrink-0">
                   <Phone className="h-6 w-6 text-primary" />
@@ -120,6 +148,7 @@ export const ContactSection = () => {
                 </div>
               </div>
 
+              {/* Location section */}
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-full bg-primary/10 shrink-0">
                   <MapPin className="h-6 w-6 text-primary" />
@@ -138,6 +167,7 @@ export const ContactSection = () => {
               </div>
             </div>
 
+            {/* Social media links */}
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
               <div className="flex space-x-4 justify-center">
@@ -154,10 +184,10 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          <div
-            className="bg-card p-8 rounded-lg shadow-xs"
-          >
+          {/* Right column for the contact form */}
+          <div className="bg-card p-8 rounded-lg shadow-xs">
             <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
+            {/* The onSubmit handler is now correctly placed on the <form> element */}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
@@ -173,8 +203,6 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
                   placeholder="Pedro Machado..."
-                  // Added autocomplete attribute to fix the warning
-                  autocomplete="name"
                 />
               </div>
 
@@ -192,8 +220,6 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
                   placeholder="john@gmail.com"
-                  // Added autocomplete attribute to fix the warning
-                  autocomplete="email"
                 />
               </div>
 
@@ -210,8 +236,6 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
                   placeholder="Hello, I'd like to talk about..."
-                  // Added autocomplete attribute to fix the warning
-                  autocomplete="off"
                 />
               </div>
 
