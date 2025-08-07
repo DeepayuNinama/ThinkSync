@@ -23,10 +23,10 @@ export const ContactSection = () => {
     const data = Object.fromEntries(formData.entries());
 
     // ---
-    // IMPORTANT: Paste your new deployed Google Apps Script URL here.
-    // The new URL will be different from the previous one.
+    // IMPORTANT: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
+    // This URL must be from the new deployment you just created.
     // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxPsCjyV7g5Z1CclUQ8TA82zHj_Omd7durLRBrlXBjVUcjIGiHlZJQoALi7mrLmQoMYRw/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbx0FYsK22YavNy3aM70KMWIGz8cK32FAHTozaNqNr9D4aTkbp-s6tEQBUwq0LMLNtxlIQ/exec";
 
     try {
       const response = await fetch(appsScriptUrl, {
