@@ -6,7 +6,6 @@ import {
   Phone,
   Send,
   Facebook,
-  Twitter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -16,36 +15,62 @@ export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Updated handleSubmit function for Google Sheets integration and custom toast
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    // Replace "YOUR_APPS_SCRIPT_URL" with the URL you get after deploying your Google Apps Script
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbwQ9nsrg1Y4_lr7CyI9JFkpP60TaKPFXzEUV4D5obKTAbAJIiIqU9Ke2IH3BcY_uSpvtw/exec";
+
+    try {
+      const response = await fetch(appsScriptUrl, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      if (response.ok) {
+        toast({
+          title: "ThinkSync heard you!",
+          description: "Thank you for notifying us, we're looking forward to connecting!",
+        });
+        e.target.reset(); // Reset the form fields after successful submission
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission failed",
+        description: "There was an error sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const handleEmailCopy = async () => {
-  await navigator.clipboard.writeText("thinksyncnow@gmail.com");
-  toast({
-    title: "Copied!",
-    description: "Email address copied to clipboard.",
-  });
-  }
-   // handlePhoneCopy
-  const handlePhoneCopy = async () => {
-  await navigator.clipboard.writeText("+91 97262 17070");
-  toast({
-    title: "Copied!",
-    description: "Phone Number copied to clipboard.",
-  });
-};
+    await navigator.clipboard.writeText("thinksyncnow@gmail.com");
+    toast({
+      title: "Copied!",
+      description: "Email address copied to clipboard.",
+    });
+  };
 
+  const handlePhoneCopy = async () => {
+    await navigator.clipboard.writeText("+91 97262 17070");
+    toast({
+      title: "Copied!",
+      description: "Phone Number copied to clipboard.",
+    });
+  };
 
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
@@ -53,68 +78,63 @@ export const ContactSection = () => {
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
           Get In <span className="text-primary"> Touch</span>
         </h2>
-
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
           We collect the right information to create strategies that truly fit your needs, all while keeping your data safe and secure, because TRUST matters.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-8 ">
+            <div className="space-y-8 text-left w-full pl-10">
+              {/* Email */}
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-primary/10 shrink-0">
+                  <Mail className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-sm text-foreground/70">Email</h4>
+                  <button
+                    onClick={handleEmailCopy}
+                    className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                  >
+                    thinksyncnow@gmail.com
+                  </button>
+                </div>
+              </div>
 
-<div className="space-y-8 text-left w-full pl-10">
-  {/* Email */}
-  <div className="flex items-start gap-4">
-    <div className="p-3 rounded-full bg-primary/10 shrink-0">
-      <Mail className="h-6 w-6 text-primary" />
-    </div>
-    <div>
-      <h4 className="font-medium text-sm text-foreground/70">Email</h4>
-      <button
-        onClick={handleEmailCopy}
-        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
-      >
-        thinksyncnow@gmail.com
-      </button>
-    </div>
-  </div>
+              {/* Phone */}
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-primary/10 shrink-0">
+                  <Phone className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-sm text-foreground/70">Phone</h4>
+                  <button
+                    onClick={handlePhoneCopy}
+                    className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                  >
+                    +91 97262 17070
+                  </button>
+                </div>
+              </div>
 
-  {/* Phone */}
-  <div className="flex items-start gap-4">
-    <div className="p-3 rounded-full bg-primary/10 shrink-0">
-      <Phone className="h-6 w-6 text-primary" />
-    </div>
-    <div>
-      <h4 className="font-medium text-sm text-foreground/70">Phone</h4>
-      <button
-        onClick={handlePhoneCopy}
-        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors focus:outline-none cursor-pointer"
-      >
-        +91 97262 17070
-      </button>
-    </div>
-  </div>
-
-  {/* Location */}
-  <div className="flex items-start gap-4">
-    <div className="p-3 rounded-full bg-primary/10 shrink-0">
-      <MapPin className="h-6 w-6 text-primary" />
-    </div>
-    <div>
-      <h4 className="font-medium text-sm text-foreground/70">Location</h4>
-      <a
-        href="https://maps.app.goo.gl/wLx296VcUA1HE1yg6"
-        className="block text-left text-base text-muted-foreground hover:text-primary transition-colors"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Ahmedabad, Gujarat
-      </a>
-    </div>
-  </div>
-</div>
- 
-
-
+              {/* Location */}
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-primary/10 shrink-0">
+                  <MapPin className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-sm text-foreground/70">Location</h4>
+                  <a
+                    href="https://maps.app.goo.gl/wLx296VcUA1HE1yg6"
+                    className="block text-left text-base text-muted-foreground hover:text-primary transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ahmedabad, Gujarat
+                  </a>
+                </div>
+              </div>
+            </div>
 
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
@@ -134,17 +154,15 @@ export const ContactSection = () => {
 
           <div
             className="bg-card p-8 rounded-lg shadow-xs"
-            onSubmit={handleSubmit}
           >
             <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
-
-            <form className="space-y-6">
+            {/* The onSubmit handler is now on the <form> element */}
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium mb-2"
                 >
-                  {" "}
                   Your Name
                 </label>
                 <input
@@ -162,7 +180,6 @@ export const ContactSection = () => {
                   htmlFor="email"
                   className="block text-sm font-medium mb-2"
                 >
-                  {" "}
                   Your Email
                 </label>
                 <input
@@ -180,7 +197,6 @@ export const ContactSection = () => {
                   htmlFor="message"
                   className="block text-sm font-medium mb-2"
                 >
-                  {" "}
                   Your Message
                 </label>
                 <textarea
