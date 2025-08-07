@@ -9,52 +9,56 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useRef } from "react";
+import { useState } from "react"; // Removed useRef as it's no longer needed
 
 export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const formRef = useRef(null); // Ref for the form element
 
-  // The handleSubmit function now uses a hidden iframe to submit the form, bypassing CORS.
+  // The handleSubmit function now uses a standard fetch request with a URL-encoded body
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Create a new iframe for the form submission
-    const iframe = document.createElement("iframe");
-    iframe.name = "hidden-iframe";
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
+    // Get the form data
+    const formData = new FormData(e.target);
+    // Convert it to URLSearchParams for a 'x-www-form-urlencoded' request
+    const data = new URLSearchParams(formData).toString();
 
-    iframe.onload = () => {
-      // This function runs when the form submission is complete
-      setIsSubmitting(false);
-      
-      // Show the success toast message
-      toast({
-        title: "ThinkSync heard you!",
-        description: "Thank you for notifying us, we're looking forward to connecting!",
+    // ---
+    // ✅ IMPORTANT: PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
+    // You MUST redeploy the Apps Script and use the new URL.
+    // ---
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxeueG9G0rqAjDDKxI0FJ4Wb6CqTisMWIid5hE80BRYRGe2axUd0MpIbdBa3JTzHnMfaA/exec";
+
+    try {
+      const response = await fetch(appsScriptUrl, {
+        method: "POST",
+        body: data, // Send the URL-encoded string directly
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       });
 
-      // Reset the form fields after a successful submission
-      formRef.current.reset();
-      
-      // Clean up the iframe
-      document.body.removeChild(iframe);
-    };
-
-    // ---
-    // ✅ PASTE YOUR NEW GOOGLE APPS SCRIPT URL HERE
-    // It is critical that this is the NEW URL from your latest deployment.
-    // ---
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxuLjTyKC7sGG-AH3goOQmPhH2lQWqBZ6sxUMkkpSAyOsnsFILFwDZEc07A9gFe1xZYLg/exec";
-
-    // Set the form attributes for submission to the Apps Script URL
-    formRef.current.action = appsScriptUrl;
-    formRef.current.method = "POST";
-    formRef.current.target = "hidden-iframe";
-    formRef.current.submit();
+      if (response.ok) {
+        toast({
+          title: "ThinkSync heard you!",
+          description: "Thank you for notifying us, we're looking forward to connecting!",
+        });
+        e.target.reset(); // Reset the form fields after successful submission
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission failed",
+        description: "There was an error sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleEmailCopy = async () => {
@@ -154,7 +158,7 @@ export const ContactSection = () => {
             className="bg-card p-8 rounded-lg shadow-xs"
           >
             <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-6" ref={formRef}>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
@@ -169,6 +173,8 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
                   placeholder="Pedro Machado..."
+                  // Added autocomplete attribute to fix the warning
+                  autocomplete="name"
                 />
               </div>
 
@@ -186,6 +192,8 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
                   placeholder="john@gmail.com"
+                  // Added autocomplete attribute to fix the warning
+                  autocomplete="email"
                 />
               </div>
 
@@ -202,6 +210,8 @@ export const ContactSection = () => {
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
                   placeholder="Hello, I'd like to talk about..."
+                  // Added autocomplete attribute to fix the warning
+                  autocomplete="off"
                 />
               </div>
 
